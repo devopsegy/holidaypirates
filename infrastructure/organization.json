@@ -1,0 +1,9 @@
+{
+  "data": {
+    "type": "organizations",
+    "attributes": {
+      "name": "mohamed_ali_test_org",
+      "email": "user@example.com"
+    }
+  }
+}

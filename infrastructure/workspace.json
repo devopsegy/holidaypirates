@@ -1,0 +1,11 @@
+{
+  "data": {
+    "attributes": {
+      "name":"task",
+      "resource-count": 0,
+      "updated-at": "2017-11-29T19:18:09.976Z",
+      "execution-mode": "local"
+    }
+  },
+  "type": "workspaces"
+}
