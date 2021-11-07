@@ -1,4 +1,4 @@
-Hello Jeffy You can follow the steps below in order to install the application.
+You can follow the steps below in order to install the application.
 
 
 Dependencies:
@@ -10,7 +10,7 @@ AWS CLI
 
 
 
-Installation:
+Project Setup
 
 1- Login to AWS 
 
