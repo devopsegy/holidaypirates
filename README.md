@@ -14,7 +14,7 @@ Project Setup
 
 1- Login to AWS 
 
-aws configure
+  - aws configure
 
 2- Installing terraform
 
