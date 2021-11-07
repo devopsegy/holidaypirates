@@ -17,7 +17,10 @@ Project Setup
 2- Installing terraform
 
 3- Run the below command to deply the app.
+
 •	terraform init
+
 •	terraform plan
+
 •	terraform apply
 
