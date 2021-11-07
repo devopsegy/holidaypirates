@@ -11,6 +11,7 @@ Terraform v0.13.0 AWS CLI
 Project Setup
 
 1- Login to AWS
+
 •	aws configure
 
 2- Installing terraform
