@@ -4,10 +4,15 @@ Terraform modules for creating a production ready ECS Cluster in AWS.
 
 Features:
 Amazon Elastic Compute Cloud (ECS) 
+
 High-availability (Multi-AZ)
+
 Loadbalanced (ALB)
+
 Isolated in a VPC
+
 Private -> Public access (NAT'd)
+
 Auto-scaling
 
 
