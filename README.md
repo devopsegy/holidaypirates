@@ -26,6 +26,9 @@ Terraform Cloud Account
 
 4 - Run the below command to deply the app.
 
-• bash setup.sh
+
+• make create_TF
+
+• make build_infr
 
 Finally, you will have the endpoint, then you can add the endpoint then /hello/
