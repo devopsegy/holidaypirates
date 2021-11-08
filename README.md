@@ -29,3 +29,5 @@ Project Setup
 4 - Run the below command to deply the app.
 
  •	bash setup.sh
+ 
+ Finally you will have the endpoint, then you can add the endpoint then /hello/
