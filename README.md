@@ -1,4 +1,6 @@
+
 You can follow the steps in the below in order to install the application.
+
 
 Dependencies:
 
@@ -19,11 +21,11 @@ Project Setup
 
 2- Installing terraform
 
-3- Run the below command to deply the app.
+3- login to terraform cloud account.
 
-•	terraform init
+ •	terraform login
 
-•	terraform plan
 
-•	terraform apply
+4 - Run the below command to deply the app.
 
+ •	bash setup.sh
