@@ -8,6 +8,9 @@ Python v3.8.5
 
 Terraform v0.13.0 AWS CLI
 
+Terraform Cloud Account
+
+
 Project Setup
 
 1- Login to AWS
