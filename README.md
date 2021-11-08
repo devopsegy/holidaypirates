@@ -1,4 +1,4 @@
-You can follow the steps below in order to install the application.
+You can follow the steps in the below in order to install the application.
 
 Dependencies:
 
