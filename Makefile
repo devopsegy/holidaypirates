@@ -26,17 +26,8 @@ image_push:
 	docker push ${IMAGE_NAME_LATEST}
 	docker push ${IMAGE_NAME_TAGGED}
 
-create_org:
-	curl \
-  --header "Authorization: Bearer MrEzqUyuoHov4g.atlasv1.tS1B6fMfD5lbhqqs4G1sw5h6Da5yhKAF9MKEOMkQ4Qpr5JA2HDhSp79arOTzz1yfzZA" \
-  --header "Content-Type: application/vnd.api+json" \
-  --request POST \
-  --data @infrastructure/organization.json \
-  https://app.terraform.io/api/v2/organizations
-
-create_workspace:
-	curl   --header "Authorization: Bearer MrEzqUyuoHov4g.atlasv1.tS1B6fMfD5lbhqqs4G1sw5h6Da5yhKAF9MKEOMkQ4Qpr5JA2HDhSp79arOTzz1yfzZA"   --header "Content-Type: application/vnd.api+json"   --request POST   --data @infrastructure/workspace.json   https://app.terraform.io/api/v2/organizations/mohamed_ali_test_org/workspaces
 create_TF:
-	curl   --header "Authorization: Bearer MrEzqUyuoHov4g.atlasv1.tS1B6fMfD5lbhqqs4G1sw5h6Da5yhKAF9MKEOMkQ4Qpr5JA2HDhSp79arOTzz1yfzZA"   --header "Content-Type: application/vnd.api+json"   --request POST   --data @infrastructure/workspace.json   https://app.terraform.io/api/v2/organizations/mohamed_ali_test_org/workspaces	
+	bash setup.sh 
 
-app_expose:
+build_infr:
+	cd infrastructure; terraform init && terraform plan && terraform apply

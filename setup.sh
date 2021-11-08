@@ -58,8 +58,6 @@ fi
 
 # Set up some variables we'll need
 HOST="${1:-app.terraform.io}"
-BACKEND_TF=$(dirname ${BASH_SOURCE[0]})/../backend.tf
-PROVIDER_TF=$(dirname ${BASH_SOURCE[0]})/../provider.tf
 TERRAFORM_VERSION=$(terraform version -json | jq -r '.terraform_version')
 
 # Check that we've already authenticated via Terraform in the static credentials
@@ -69,6 +67,14 @@ TERRAFORM_VERSION=$(terraform version -json | jq -r '.terraform_version')
 # and you hopefully do not need this Getting Started project if you're using one
 # already!
 CREDENTIALS_FILE="$HOME/.terraform.d/credentials.tfrc.json"
+if [[ ! -f $CREDENTIALS_FILE || $TOKEN == null ]]; then
+  fail "We couldn't find a token in the Terraform credentials file at $CREDENTIALS_FILE."
+  fail "Please run 'terraform login', then run this setup script again."
+  exit 1
+fi
+
+
+CREDENTIALS_FILE="$HOME/.terraform.d/credentials.tfrc.json"
 TOKEN=$(jq -j --arg h "$HOST" '.credentials[$h].token' $CREDENTIALS_FILE)
 if [[ ! -f $CREDENTIALS_FILE || $TOKEN == null ]]; then
   fail "We couldn't find a token in the Terraform credentials file at $CREDENTIALS_FILE."
@@ -76,18 +82,6 @@ if [[ ! -f $CREDENTIALS_FILE || $TOKEN == null ]]; then
   exit 1
 fi
 
-# Check that this is your first time running this script. If not, we'll reset
-# all local state and restart from scratch!
-if ! git diff-index --quiet --no-ext-diff HEAD --; then
-  echo "It looks like you may have run this script before! Re-running it will reset any
-  changes you've made to backend.tf and provider.tf."
-  echo
-  pause_for_confirmation
-
-  git checkout HEAD backend.tf provider.tf
-  rm -rf .terraform
-  rm -f *.lock.hcl
-fi
 
 echo
 printf "\r\033[00;35;1m
@@ -112,18 +106,12 @@ echo
 echo "Creating an organization and workspace..."
 sleep 1
 setup() {
-  curl https://$HOST/api/getting-started/setup \
-    --request POST \
-    --silent \
-    --header "Content-Type: application/vnd.api+json" \
-    --header "Authorization: Bearer $TOKEN" \
-    --header "User-Agent: tfc-getting-started" \
-    --data @- << REQUEST_BODY
-{
-	"workflow": "remote-operations",
-  "terraform-version": "$TERRAFORM_VERSION"
-}
-REQUEST_BODY
+curl \
+  --header "Authorization: Bearer $TOKEN" \
+  --header "Content-Type: application/vnd.api+json" \
+  --request POST \
+  --data @infrastructure/organization.json \
+  https://$HOST/api/v2/organizations
 }
 
 response=$(setup)
@@ -147,124 +135,28 @@ if [[ $info != null ]]; then
   exit 0
 fi
 
-organization_name=$(echo $response | jq -r '.data."organization-name"')
-workspace_name=$(echo $response | jq -r '.data."workspace-name"')
+setup2() {
+curl   --header "Authorization: Bearer $TOKEN"   --header "Content-Type: application/vnd.api+json"   --request POST   --data @infrastructure/workspace.json   https://app.terraform.io/api/v2/organizations/mohamed_ali_test_org/workspaces
+}
 
-echo
-echo "Writing remote backend configuration to backend.tf..."
-sleep 2
+response2=$(setup2)
 
-# We don't sed -i because MacOS's sed has problems with it.
-TEMP=$(mktemp)
-cat $BACKEND_TF |
-  # add backend config for the hostname if necessary
-  if [[ "$HOST" != "app.terraform.io" ]]; then sed "5a\\
-\    hostname = \"$HOST\"
-    "; else cat; fi |
-  # replace the organization and workspace names
-  sed "s/{{ORGANIZATION_NAME}}/${organization_name}/" |
-  sed "s/{{WORKSPACE_NAME}}/${workspace_name}/" \
-    > $TEMP
-mv $TEMP $BACKEND_TF
-
-# add extra provider config for the hostname if necessary
-if [[ "$HOST" != "app.terraform.io" ]]; then
-  TEMP=$(mktemp)
-  cat $PROVIDER_TF |
-    sed "11a\\
-  \  hostname = var.provider_hostname
-      " \
-      > $TEMP
-  echo "
-variable \"provider_hostname\" {
-  type = string
-}" >> $TEMP
-  mv $TEMP $PROVIDER_TF
+if [[ $(echo $response2 | jq -r '.errors') != null ]]; then
+  fail "An unknown error occurred: ${response}"
+  exit 1
 fi
 
-echo
-divider
-echo
-success "Ready to go; the example configuration is set up to use Terraform Cloud!"
-echo
-echo "An example workspace named '${workspace_name}' was created for you."
-echo "You can view this workspace in the Terraform Cloud UI here:"
-echo "https://$HOST/app/${organization_name}/workspaces/${workspace_name}"
-echo
-info "Next, we'll run 'terraform init' to initialize the backend and providers:"
-echo
-echo "$ terraform init"
-echo
-pause_for_confirmation
+api_error=$(echo $response2 | jq -r '.error')
+if [[ $api_error != null ]]; then
+  fail "\n${api_error}"
+  exit 1
+fi
 
-echo
-terraform init
-echo
-echo "..."
-sleep 2
-echo
-divider
-echo
-info "Now it’s time for 'terraform plan', to see what changes Terraform will perform:"
-echo
-echo "$ terraform plan"
-echo
-pause_for_confirmation
+# TODO: If there's an active trial, we should just retrieve that and configure
+# it instead (especially if it has no state yet)
+info=$(echo $response2 | jq -r '.info')
+if [[ $info != null ]]; then
+  info "\n${info}"
+  exit 0
+fi
 
-echo
-terraform plan
-echo
-echo "..."
-sleep 3
-echo
-divider
-echo
-success "The plan is complete!"
-echo
-echo "This plan was initiated from your local machine, but executed within
-Terraform Cloud!"
-echo
-echo "Terraform Cloud runs Terraform on disposable virtual machines in
-its own cloud infrastructure. This 'remote execution' helps provide consistency
-and visibility for critical provisioning operations. It also enables notifications,
-version control integration, and powerful features like Sentinel policy enforcement
-and cost estimation (shown in the output above)."
-echo
-info "To actually make changes, we'll run 'terraform apply'. We'll also auto-approve
-the result, since this is an example:"
-echo
-echo "$ terraform apply -auto-approve"
-echo
-pause_for_confirmation
-
-echo
-terraform apply -auto-approve
-
-echo
-echo "..."
-sleep 3
-echo
-divider
-echo
-success "You did it! You just provisioned infrastructure with Terraform Cloud!"
-echo
-info "The organization we created here has a 30-day free trial of the Team &
-Governance tier features. After the trial ends, you'll be moved to the Free tier."
-echo
-echo "You now have:"
-echo
-echo "  * Workspaces for organizing your infrastructure. Terraform Cloud manages"
-echo "    infrastructure collections with workspaces instead of directories. You"
-echo "    can view your workspace here:"
-echo "    https://$HOST/app/$organization_name/workspaces/$workspace_name"
-echo "  * Remote state management, with the ability to share outputs across"
-echo "    workspaces. We've set up state management for you in your current"
-echo "    workspace, and you can reference state from other workspaces using"
-echo "    the 'terraform_remote_state' data source."
-echo "  * Much more!"
-echo
-info "To see the mock infrastructure you just provisioned and continue exploring
-Terraform Cloud, visit:
-https://$HOST/fake-web-services"
-echo
-exit 0
