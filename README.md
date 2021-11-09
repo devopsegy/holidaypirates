@@ -23,7 +23,7 @@ Terraform Cloud Account
 You have to install the AWS CLI tools in order to manage your aws account remotly.
 Follow the steps in the below link.
 
-[![AWS](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)](https://docs.aws.amazon.com)
+[![AWS](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
 
 2- You have to login to your AWS account by the the below command.
 ```bash
