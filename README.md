@@ -33,4 +33,4 @@ Terraform Cloud Account
 
 Finally, you will have the endpoint, then you can add the endpoint then /hello/
 
-http://myapp-load-balancer-1225161169.us-west-2.elb.amazonaws.com/hello/
+http://myapp-load-balancer-1225161169.us-west-2.elb.amazonaws.com/hello/mohammed
