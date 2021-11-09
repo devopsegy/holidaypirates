@@ -23,6 +23,7 @@ Follow the steps in the below link.
 https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
 
 2- You have to login to your AWS account by the the below command.
+
 #aws configure
 
 2- You can follow the link below to install terraform tools.
