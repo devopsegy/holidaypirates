@@ -19,29 +19,34 @@ Terraform Cloud Account
 ## Project Setup
 
 1- Installing AWS cli tools.
+
 You have to install the AWS CLI tools in order to manage your aws account remotly.
 Follow the steps in the below link.
 
-https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
+[![AWS](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)](https://docs.aws.amazon.com)
 
 2- You have to login to your AWS account by the the below command.
+```bash
+aws configure
+```
+3- You can follow the link below to install terraform tools.
 
-#aws configure
+[![terraform](https://www.terraform.io/downloads.html)](https://www.terraform.io/downloads.html)
 
-2- You can follow the link below to install terraform tools.
 
-https://www.terraform.io/downloads.html
+4- You have to login to terraform cloud account by the below command.
+```bash
+terraform login
+```
 
-3- You have to login to terraform cloud account by the below command.
 
-#terraform login
-
-4 - Run the below command to deply the app.
-
-#make create_TF
-
-#make build_infr
-
+5 - Run the below command to deply the app.
+```bash
+make create_TF
+```
+```bash
+make build_infr
+```
 Finally, you will have the endpoint, then you can add the endpoint then /hello/
 
 http://myapp-load-balancer-1225161169.us-west-2.elb.amazonaws.com/hello/mohammed
