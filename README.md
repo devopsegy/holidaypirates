@@ -10,6 +10,8 @@ Docker v19.03.12
 
 Python v3.8.5
 
+AWS cli Tools 
+
 Terraform v0.13.0 AWS CLI
 
 Terraform Cloud Account
