@@ -1,6 +1,6 @@
 terraform {
   backend "remote" {
-    organization = "mohamed_ali_test_org"
+    organization = "mohamed_ali_test_org1"
 
     workspaces {
       name = "task"
