@@ -136,7 +136,7 @@ if [[ $info != null ]]; then
 fi
 
 setup2() {
-curl   --header "Authorization: Bearer $TOKEN"   --header "Content-Type: application/vnd.api+json"   --request POST   --data @infrastructure/workspace.json   https://app.terraform.io/api/v2/organizations/mohamed_ali_test_org/workspaces
+curl   --header "Authorization: Bearer $TOKEN"   --header "Content-Type: application/vnd.api+json"   --request POST   --data @infrastructure/workspace.json   https://app.terraform.io/api/v2/organizations/mohamed_ali_test_org1/workspaces
 }
 
 response2=$(setup2)
