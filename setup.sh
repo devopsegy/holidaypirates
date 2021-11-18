@@ -1,5 +1,5 @@
 #! /bin/bash
-set -euo pipefail
+#set -euo pipefail
 
 info() {
   printf "\r\033[00;35m$1\033[0m\n"
